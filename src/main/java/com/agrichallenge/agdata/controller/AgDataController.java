@@ -29,13 +29,32 @@ public class AgDataController {
         return new ResponseEntity<>(products, HttpStatus.OK);
     }
 
-    // TODO: GET /api/agdata/crop-count?cropName=corn
+
+    @GetMapping("/crop-count")
+    public ResponseEntity<?> getCropCount(@RequestParam("cropName") String cropName) throws IOException{
+        Long agData = agDataService.getCropCount(cropName);
+        if(agData == null){
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity<>(agData,HttpStatus.OK);
+    }
+
+    @GetMapping("/average-yield")
+    public ResponseEntity<?> getAverage(@RequestParam("cropName") String cropName) throws IOException{
+        double agData = agDataService.getAverageYield(cropName);
+        return new ResponseEntity<>(agData,HttpStatus.OK);
+    }
 
 
-    // TODO: GET /api/agdata/average-yield?cropName=wheat
+    @GetMapping("/by-region")
+    public ResponseEntity<?> getSpecificRegionData(@RequestParam("region") String region) throws IOException{
+        List<AgData> agDatas = agDataService.getRecordsByRegion(region);
+        if(agDatas.isEmpty()){
+            return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
+        }
 
-
-    // TODO: GET /api/agdata/by-region?region=Midwest
+        return new ResponseEntity<>(agDatas,HttpStatus.OK);
+    }
 
 
 }
